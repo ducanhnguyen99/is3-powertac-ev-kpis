@@ -6,7 +6,7 @@ import sys
 from analysis_tools.transformers.ev_kpi_parser import (tf_ba_transformer)
 from analysis_tools.analyzers.broker_performance_plotter import (kpi2_plotter)
 
-power_type = sys.argv[1]
+powertype = sys.argv[1]
 group = sys.argv[2]
 
 experiment_path = '/home/danguyen/data/powertac/{}'.format(group)
@@ -23,7 +23,7 @@ for game in list_games:
         #balancing_actions = pd.read_csv(cwd/"{0}/analysis/{1}.broker-balancing-actions.csv".format(game, game), skipinitialspace=True, delimiter=";", decimal = ".")
         final_df = tf_ba_transformer(tf_transactions, balancing_actions)
         destination = Path('/home/danguyen/data/powertac/analysis/output')
-        kpi2_plotter(final_df, power_type, destination/"{0}_{1}_broker_performance.png".format(game, power_type), game, tf_transactions)
+        kpi2_plotter(final_df, powertype, destination/"{0}_{1}_broker_performance.png".format(game, powertype), game, tf_transactions)
     except IndexError:
         print('Game {} could not be processed due to missing csv files'.format(game))
         

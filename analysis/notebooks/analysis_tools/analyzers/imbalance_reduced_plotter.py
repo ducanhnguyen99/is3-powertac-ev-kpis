@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib.patheffects as path_effects
 
-def add_median_labels(ax, fmt='.1f'):
+def add_median_labels(ax, fmt='.2f'):
         lines = ax.get_lines()
         boxes = [c for c in ax.get_children() if type(c).__name__ == 'PathPatch']
         lines_per_box = int(len(lines) / len(boxes))
