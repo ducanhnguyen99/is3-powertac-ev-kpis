@@ -1,9 +1,15 @@
-import numpy as np
 import pandas as pd
 
 def tf_ba_transformer(tf_transactions, balancing_actions):
     
-    # tariff transactions
+    """Create a merged dataset to identify the tariff/transaction type of the balancing action and the balancing charge for the customer.
+
+    Arguments:
+        tf_transactions (Pd.DataFrame): The Data frame containing tariff transactions. 
+        balancing_actions (Pd.DataFrame): The Data frame containing balancing action.
+    """
+    
+    # aggregate tariff transactions corresponding to regulation
     tf_reg = tf_transactions[tf_transactions['transaction-regulation'] == 1].copy()
 
     tf_reg = tf_reg[['timeslot'
@@ -18,13 +24,13 @@ def tf_ba_transformer(tf_transactions, balancing_actions):
                                 , 'transaction-type'], as_index=False).sum().copy()
     final_tf = tf_reg_agg[tf_reg_agg['transaction-kWh'] != 0].copy()
 
-    # balancing actions
-    
+    # pivot balancing actions longer to have one broker column with the respective loads and payments
     df = balancing_actions.copy()
     iterations = range(int((len(df.columns)-6)/7))
 
     final_ba = pd.DataFrame()
-
+    
+    # for the i the number of brokers pivot the required columns
     for i in iterations:
         df_basic = df.iloc[:, [0,3]]
         df_data = df.iloc[:, 6+i*7:(i+1)*7+6]

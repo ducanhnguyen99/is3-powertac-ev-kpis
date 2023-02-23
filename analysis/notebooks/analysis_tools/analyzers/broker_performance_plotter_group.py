@@ -47,10 +47,13 @@ def kpi2_plotter(df_melt_energy, df_melt_profit, df_melt_perKwh, powertype, path
                                                    , 'net price per kWh (given powertypes)']
     h, l = c.get_legend_handles_labels()
     c.legend(h, new_labels, loc = "upper right")
-
-    add_median_labels(a)
-    add_median_labels(b)
-    add_median_labels(c)
+    
+    try:
+        add_median_labels(a)
+        add_median_labels(b)
+        add_median_labels(c)
+    except ZeroDivisionError:
+        print('Game {} could not be analyzed due to empty csv file possibly since there are no balancing actions'.format(game))
 
     axes[0].set(ylabel="Energy")
     axes[1].set(ylabel="Money")
