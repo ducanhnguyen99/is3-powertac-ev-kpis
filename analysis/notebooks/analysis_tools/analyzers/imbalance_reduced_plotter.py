@@ -27,7 +27,7 @@ def add_median_labels(ax, fmt='.2f'):
             path_effects.Normal(),
         ])
 
-def kpi1_plotter(final_df, powertype, imbalance, path, game):
+def kpi1_plotter(final_df, powertype, imbalance, path, game, brokers):
     """Plot a boxplot of the hourly reduced imbalance through balancing with the command line arguments.
 
     Arguments:
@@ -75,7 +75,7 @@ def kpi1_plotter(final_df, powertype, imbalance, path, game):
                        , x = mid
                        , fontsize = 14,
                         fontweight = 'bold')
-        plt.title('Game: {}'.format(game), y = 1.1)
+        plt.title('Game: {0}, Brokers: {1}'.format(game, brokers), y = 1.1)
         plt.ylabel('% of imbalance reduced', fontsize=12, labelpad=10)
         plt.xlabel('hour', fontsize=12, labelpad=10)
 

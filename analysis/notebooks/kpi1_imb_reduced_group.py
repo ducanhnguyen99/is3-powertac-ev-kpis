@@ -38,4 +38,4 @@ for game in list_games:
         print('Game {} could not be processed due to missing csv files'.format(game))
         continue
         
-kpi1_plotter(final_df, powertype,imbalance, destination/"{0}_{1}_{2}_{3}_imbalance_reduced.png".format(group, powertype, imbalance, brokers), group)
+kpi1_plotter(final_df, powertype,imbalance, destination/"{0}_{1}_{2}_{3}_imbalance_reduced.png".format(group, powertype, imbalance, brokers), group, brokers)
