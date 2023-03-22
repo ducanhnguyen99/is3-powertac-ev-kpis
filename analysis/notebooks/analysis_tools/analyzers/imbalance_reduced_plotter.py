@@ -63,9 +63,11 @@ def kpi1_plotter(final_df, powertype, imbalance, path, game, brokers):
 
     sns.set_style("whitegrid")
     
+    # plot
+    
     f = plt.figure(figsize=(16,4))
     
-    mid = (f.subplotpars.right + f.subplotpars.left)/2
+    mid = (f.subplotpars.right + f.subplotpars.left)/2 # centered title
     
     try:
         box_plot = sns.boxplot(x='hour', y='perc', data=kpi1_perc)
