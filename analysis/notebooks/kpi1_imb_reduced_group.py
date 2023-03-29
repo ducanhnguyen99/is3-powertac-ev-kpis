@@ -3,8 +3,14 @@ import pandas as pd
 import numpy as np
 import sys
 
-from analysis_tools.transformers.ev_kpi_parser import (tf_ba_transformer)
+from analysis_tools.transformers.balancing_kpi_transformer import (tf_ba_transformer)
+from analysis_tools.transformers.imbalance_reduced_transformer import (kpi1_transformer)
 from analysis_tools.analyzers.imbalance_reduced_plotter import (kpi1_plotter)
+from analysis_tools.utility import (filter_games)
+
+'''
+    Execution file for the analysis of imbalance reduced through balancing actions of brokers (KPI1).
+'''
 
 # receive command line arguments
 
@@ -18,21 +24,15 @@ brokers = sys.argv[4]
 path = '/data/passive/powertac/games/{}'.format(group)
 destination = Path('/home/danguyen/data/powertac/analysis/output_all')
 cwd = Path(path)
+games_csv = "Power-TAC-finals-2022-csv-file.csv"
 
 # read games that include our brokers
 
-games = pd.read_csv(cwd/"Power-TAC-finals-2022-csv-file.csv", skipinitialspace=True, delimiter=";")
-games = games.fillna("na") # used for masking
-
-broker_list = brokers.split(",")
-mask = games[broker_list].apply(lambda x: x.str.contains('na')).sum(axis=1) == 0 # mask filters all games where the desired brokers exist therefore the broker columns should contain no na's
-games = games[(mask) & (games["gameSize"] == len(broker_list))] # check that it is this exact number of brokers only
-list_games = games.iloc[:, 1].tolist() # collect identified game ids
-
+list_games = filter_games(cwd, games_csv, brokers)
 
 final_df = pd.DataFrame() #initialize 
 
-# aggregate data of every game and transform
+# aggregate data of every game into one data frame and merge tariff transactions and balancing actions
 
 for game in list_games:
     try:
@@ -43,7 +43,7 @@ for game in list_games:
     except Exception:
         print('Game {} could not be processed due to missing csv files'.format(game))
         continue
-        
-# plot and save figure
 
-kpi1_plotter(final_df, tarifftype,imbalance, destination/"{0}_{1}_{2}_{3}_imbalance_reduced.png".format(group, tarifftype, imbalance, brokers), group, brokers)
+# transform and plot the kpi
+kpi1_perc = kpi1_transformer(final_df, tarifftype, imbalance) 
+kpi1_plotter(kpi1_perc, tarifftype,imbalance, destination/"{0}_{1}_{2}_{3}_imbalance_reduced.png".format(group, tarifftype, imbalance, brokers), group, brokers)

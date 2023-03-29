@@ -3,13 +3,18 @@ import pandas as pd
 import numpy as np
 import sys
 
-from analysis_tools.transformers.ev_kpi_parser import (tf_ba_transformer)
-from analysis_tools.transformers.broker_performance_transformer_group import (kpi2_transformer)
-from analysis_tools.analyzers.broker_performance_plotter_group import (kpi2_plotter)
+from analysis_tools.transformers.balancing_kpi_transformer import (tf_ba_transformer)
+from analysis_tools.transformers.broker_balancing_performance_transformer import (kpi2_transformer)
+from analysis_tools.analyzers.broker_balancing_performance_plotter import (kpi2_plotter)
+from analysis_tools.utility import (filter_games)
+
+'''
+    Execution file for the analysis of brokers balancing actions (KPI2).
+'''
 
 # receive command line arguments
 
-powertype = sys.argv[1]
+tarifftype = sys.argv[1]
 group = sys.argv[2]
 brokers = sys.argv[3]
 
@@ -18,24 +23,18 @@ brokers = sys.argv[3]
 path = '/data/passive/powertac/games/{}'.format(group)
 destination = Path('/home/danguyen/data/powertac/analysis/output_all')
 cwd = Path(path)
+games_csv = "Power-TAC-finals-2022-csv-file.csv"
 
 # read games that include our brokers
 
-games = pd.read_csv(cwd/"Power-TAC-finals-2022-csv-file.csv", skipinitialspace=True, delimiter=";")
-games = games.fillna("na") # used for masking
-
-broker_list = brokers.split(",")
-mask = games[broker_list].apply(lambda x: x.str.contains('na')).sum(axis=1) == 0 # mask filters all games where the desired brokers exist therefore the broker columns should contain no na's
-games = games[(mask) & (games["gameSize"] == len(broker_list))] # check that it is this exact number of brokers only
-list_games = games.iloc[:, 1].tolist() # collect identified game ids
+list_games = filter_games(cwd, games_csv, brokers)
 
 # initialize our dataframes aggregating the games' data
 
 df_melt_energy = pd.DataFrame()
 df_melt_profit = pd.DataFrame()
-df_melt_perKwh = pd.DataFrame()
 
-# aggregate data of every game and transform
+# aggregate data of every game into one data frame and transform
 
 for game in list_games:
     try:
@@ -46,18 +45,17 @@ for game in list_games:
         # transform the game's data
     
         final_df = tf_ba_transformer(tf_transactions, balancing_actions)
-        list_df_melt = kpi2_transformer(final_df, powertype, game, tf_transactions)
+        list_df_melt = kpi2_transformer(final_df, tarifftype, game, tf_transactions)
         
          # apprehend the game's data
         
         df_melt_energy = pd.concat([df_melt_energy, list_df_melt[0]])
         df_melt_profit = pd.concat([df_melt_profit, list_df_melt[1]])
-        df_melt_perKwh = pd.concat([df_melt_perKwh, list_df_melt[2]])
     except Exception:
         print('Game {} could not be processed due to missing csv files'.format(game))
         continue
         
-# plot and save figure
+# plot the kpi
         
-kpi2_plotter(df_melt_energy, df_melt_profit, df_melt_perKwh, powertype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, powertype, brokers), group)
+kpi2_plotter(df_melt_energy, df_melt_profit, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
        

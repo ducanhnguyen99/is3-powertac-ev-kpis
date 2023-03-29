@@ -4,28 +4,29 @@ import numpy as np
 import sys
 
 from analysis_tools.transformers.tariff_type_transformer_group import (kpi3_transformer)
-from analysis_tools.analyzers.tariff_type_plotter_group import (kpi3_plotter)
+from analysis_tools.analyzers.tariff_type_overview_plotter import (kpi3_plotter)
+from analysis_tools.utility import (filter_games)
+
+'''
+    Execution file for the analysis of tariff type KPIs (KPI3).
+'''
 
 # receive command line arguments
 
 group = sys.argv[1]
 brokers = sys.argv[2]
+customers = sys.argv[3]
 
 # set read and save path
 
 path = '/data/passive/powertac/games/{}'.format(group)
 destination = Path('/home/danguyen/data/powertac/analysis/output_all')
 cwd = Path(path)
+games_csv = "Power-TAC-finals-2022-csv-file.csv"
 
 # read games that include our brokers
 
-games = pd.read_csv(cwd/"Power-TAC-finals-2022-csv-file.csv", skipinitialspace=True, delimiter=";")
-games = games.fillna("na") # used for masking
-
-broker_list = brokers.split(",")
-mask = games[broker_list].apply(lambda x: x.str.contains('na')).sum(axis=1) == 0 # mask filters all games where the desired brokers exist therefore the broker columns should contain no na's
-games = games[(mask) & (games["gameSize"] == len(broker_list))] # check that it is this exact number of brokers only
-list_games = games.iloc[:, 1].tolist() # collect identified game ids
+list_games = filter_games(cwd, games_csv, brokers)
 
 # initialize our dataframes aggregating the games' data
 
@@ -34,7 +35,7 @@ tf_type_energy = pd.DataFrame()
 tf_type_subs = pd.DataFrame()
 tf_type_price = pd.DataFrame()
 
-# aggregate data of every game and transform
+# aggregate data of every game into one data frame and transform
 
 for game in list_games:
     try:
@@ -43,7 +44,7 @@ for game in list_games:
 
         # transform the game's data
         
-        list_df = kpi3_transformer(tf_transactions, game)
+        list_df = kpi3_transformer(tf_transactions, customers, game)
         
         # apprehend the game's data
         
@@ -57,4 +58,4 @@ for game in list_games:
 
 # plot and save figure
 
-kpi3_plotter(tf_type_count, tf_type_energy, tf_type_subs, tf_type_price, destination, brokers, group)
+kpi3_plotter(tf_type_count, tf_type_energy, tf_type_subs, tf_type_price, destination, customers, brokers, group)

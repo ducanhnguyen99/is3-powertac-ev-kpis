@@ -1,8 +1,19 @@
 import pandas as pd
 import numpy as np
 
+'''
+    Transformer for KPI3 tariff type KPIs with command line arguments. Returns for each tariff type the publish-count, energy-amount, subs-
+    number in days and avg_price per kWh.
+'''
 
-def kpi3_transformer(tf_transactions, game):
+def kpi3_transformer(tf_transactions, customers, game):
+    
+    # filter out customers if given
+    
+    if (customers != "any"):
+        customer_list = customers.split(",")
+        tf_transactions = tf_transactions[tf_transactions['customer-name'].isin(customer_list)]
+        
     tf_type_dist = tf_transactions[
         [
             "timeslot",
@@ -15,7 +26,7 @@ def kpi3_transformer(tf_transactions, game):
         ]
     ].copy()
     
-    # calculate number of unique tariff ids published
+    # calculate number of unique tariff ids published, in case of given customer-name shows the actually subscribed number of tariffs for that customer group
     
     tf_type_count = pd.DataFrame(
         tf_type_dist[["broker-name", "tariff-type", "tariff-id"]]
@@ -25,7 +36,6 @@ def kpi3_transformer(tf_transactions, game):
     tf_type_count = tf_type_count.reset_index()
     tf_type_count.columns = ["broker", "tariff-type", "count"]
 
-    # optionally select customers: tf_type_dist = tf_type_dist[tf_type_dist['customer-name'] == 'residential_ev']
     # calculate the energy traded
     tf_type_energy = pd.DataFrame(
         tf_type_dist[["broker-name", "tariff-type", "transaction-kWh"]]
@@ -36,7 +46,6 @@ def kpi3_transformer(tf_transactions, game):
     tf_type_energy.columns = ["broker", "tariff-type", "energy"]
     tf_type_energy["energy"] = tf_type_energy["energy"].apply(lambda x: abs(x))
 
-    # after checking: each customer appears in each timeslot atleast once
     # calculate the number of subscriber days
     tf_type_subs = tf_type_dist[
         [
@@ -73,6 +82,7 @@ def kpi3_transformer(tf_transactions, game):
     )
     tf_type_price = tf_type_price.reset_index()
     tf_type_price.columns = ["broker", "tariff-type", "energy", "price"]
+    tf_type_price["energy"] = tf_type_price["energy"].apply(lambda x: abs(x)) # absolute value because price already indicates the direction
     tf_type_price["avg_price"] = tf_type_price["price"] / tf_type_price["energy"]
     tf_type_price = tf_type_price.drop(columns=["energy", "price"])
 

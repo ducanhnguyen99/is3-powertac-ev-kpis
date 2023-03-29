@@ -1,14 +1,12 @@
 import pandas as pd
 
-def tf_ba_transformer(tf_transactions, balancing_actions):
-    
-    """Create a merged dataset to identify the tariff/transaction type of the balancing action and the balancing charge for the customer.
+'''
+    Transformer to create a merged dataset to identify the tariff/transaction type of the balancing action and the balancing charge for the 
+    customer.
+'''
 
-    Arguments:
-        tf_transactions (Pd.DataFrame): The Data frame containing tariff transactions. 
-        balancing_actions (Pd.DataFrame): The Data frame containing balancing action.
-    """
-    
+def tf_ba_transformer(tf_transactions, balancing_actions):
+
     # aggregate tariff transactions corresponding to regulation
     tf_reg = tf_transactions[tf_transactions['transaction-regulation'] == 1].copy()
 
