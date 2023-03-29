@@ -138,32 +138,40 @@ For consumption this means e.g. VidyutVanika receives 0.12 money per kWh and for
 ### Exemplary Insights Generated
 #### Only VidyutVanika and TUC_TAC22 utilize the balancing capacities with their tariffs
 <img src="images/exemplary_insights/finals_2022_all_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_broker_performance.png"> 
+
 ```sh
 python3 kpi2_broker_balancing_performance_group.py all finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22
 ```
+
 When looking at all types of tariffs, only these two brokers show some up-/down-regulation and corresponding profits.
 
 #### Overall market imbalance reduced varies heavily if more brokers are involved in balancing
 <img src="images/exemplary_insights/finals_2022_all_up_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_imbalance_reduced.png"> 
 <img src="images/exemplary_insights/finals_2022_all_up_VidyutVanika,TUC_TAC22_imbalance_reduced.png"> 
+
 ```sh
 python3 kpi1_imb_reduced_group.py all up finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22
 ```
+
 ```sh
 python3 kpi1_imb_reduced_group.py all up finals_2022 VidyutVanika,TUC_TAC22
 ```
+
 As only two brokers utilize the balancing capacities, the comparison of the reduced imbalance in market differs between games where only balancing brokers are involved vs. all brokers involved. This might be due to the distribution of customers who now subscribe into many different brokers which offer no balancing tariffs.
 
 #### EV-residential customer prices
 <img src="images/exemplary_insights/finals_2022_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_residential_ev_tariff_prices.png"> 
 <img src="analysis/output_all/finals_2022_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_residential_ev_tariff_subs.png"> 
+
 ```sh
 python3 kpi3_tariff_type_group.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22 residential_ev
 ```
+
 Comparing the prices Mertacor22, TUC_TAC22 and VidyutVanika offer the lowest prices for the electric vehicles. This is also reflected in the number of subscriber days, averaging the highest for these three brokers.
 
 #### Prices for Battery Storage
 <img src="images/exemplary_insights/finals_2022_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_any_tariff_prices.png"> 
+
 ```sh
 python3 kpi3_tariff_type_group.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22 any
 ```
