@@ -137,8 +137,7 @@ For consumption this means e.g. VidyutVanika receives 0.12 money per kWh and for
 
 ### Exemplary Insights Generated
 #### Only VidyutVanika and TUC_TAC22 utilize the balancing capacities with their tariffs
-<img src="images/exemplary_insights/finals_2022_all_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_broker_performance.png
-"> 
+<img src="images/exemplary_insights/finals_2022_all_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_broker_performance.png"> 
 When looking at all types of tariffs, only these two brokers show some up-/down-regulation and corresponding profits.
 
 #### Overall market imbalance reduced varies heavily if more brokers are involved in balancing
