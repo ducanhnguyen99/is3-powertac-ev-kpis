@@ -1,11 +1,10 @@
 from pathlib import Path
 import pandas as pd
-import numpy as np
 import sys
 
-from analysis_tools.transformers.balancing_kpi_transformer import (tf_ba_transformer)
-from analysis_tools.transformers.broker_balancing_performance_transformer import (kpi2_transformer)
-from analysis_tools.analyzers.broker_balancing_performance_plotter import (kpi2_plotter)
+from analysis_tools.transformers.balancing_transactions_merger import (matched_balancing_transactions)
+from analysis_tools.transformers.broker_balancing_performance_transformer import (total_energy_profit_per_broker)
+from analysis_tools.analyzers.broker_balancing_performance_plotter import (broker_balancing_performance_boxplot)
 from analysis_tools.utility import (filter_games)
 
 '''
@@ -39,13 +38,13 @@ df_melt_profit = pd.DataFrame()
 for game in list_games:
     try:
         
-        tf_transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
+        tariff_transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
         balancing_actions = pd.read_csv(cwd/"{0}/analysis/{1}.broker-balancing-actions.csv".format(game, game), skipinitialspace=True, delimiter=";", decimal = ".")
         
         # transform the game's data
     
-        final_df = tf_ba_transformer(tf_transactions, balancing_actions)
-        list_df_melt = kpi2_transformer(final_df, tarifftype, game, tf_transactions)
+        final_df = matched_balancing_transactions(tariff_transactions, balancing_actions)
+        list_df_melt = total_energy_profit_per_broker(final_df, tarifftype, tariff_transactions)
         
          # apprehend the game's data
         
@@ -57,5 +56,5 @@ for game in list_games:
         
 # plot the kpi
         
-kpi2_plotter(df_melt_energy, df_melt_profit, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
+broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
        

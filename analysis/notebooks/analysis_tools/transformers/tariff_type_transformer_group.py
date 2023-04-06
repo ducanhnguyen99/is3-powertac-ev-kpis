@@ -6,15 +6,15 @@ import numpy as np
     number in days and avg_price per kWh.
 '''
 
-def kpi3_transformer(tf_transactions, customers, game):
+def kpi3_transformer(tariff_transactions, customers, game):
     
     # filter out customers if given
     
     if (customers != "any"):
         customer_list = customers.split(",")
-        tf_transactions = tf_transactions[tf_transactions['customer-name'].isin(customer_list)]
+        tariff_transactions = tariff_transactions[tariff_transactions['customer-name'].isin(customer_list)]
         
-    tf_type_dist = tf_transactions[
+    tf_type_dist = tariff_transactions[
         [
             "timeslot",
             "broker-name",
@@ -68,7 +68,7 @@ def kpi3_transformer(tf_transactions, customers, game):
     tf_type_subs["count"] = tf_type_subs["count"].apply(lambda x: round(x / 24, 2))
     
     # calculate the average price per kWh
-    tf_df = tf_transactions[tf_transactions["transaction-type"] != "PUBLISH"].copy()
+    tf_df = tariff_transactions[tariff_transactions["transaction-type"] != "PUBLISH"].copy()
     tf_df["transaction-kWh"] = np.where(
         (tf_df["transaction-regulation"] == 1)
         & (tf_df["transaction-type"] == "PRODUCE"),

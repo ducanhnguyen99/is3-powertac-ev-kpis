@@ -40,11 +40,11 @@ tf_type_price = pd.DataFrame()
 for game in list_games:
     try:
         
-        tf_transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
+        tariff_transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
 
         # transform the game's data
         
-        list_df = kpi3_transformer(tf_transactions, customers, game)
+        list_df = kpi3_transformer(tariff_transactions, customers, game)
         
         # apprehend the game's data
         

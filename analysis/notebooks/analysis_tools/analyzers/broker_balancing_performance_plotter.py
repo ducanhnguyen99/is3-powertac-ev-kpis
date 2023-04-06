@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from analysis_tools.utility import (add_median_labels)
@@ -9,7 +7,7 @@ from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_fa
     Boxplotter for KPI2 broker balancing performance with command line arguments.
 '''
 
-def kpi2_plotter(df_melt_energy, df_melt_profit, tarifftype, path, game):
+def broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifftype, path, game):
     try:
         
         current_palette = highlight_palette

@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from analysis_tools.utility import (add_median_labels)
@@ -9,10 +7,8 @@ from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_fa
     Boxplotter for KPI1 imbalance reduced through balancing actions with command line arguments.
 '''
 
-def kpi1_plotter(kpi1_perc, tarifftype, imbalance, path, game, brokers):
-    
+def imbalance_reduced_per_timeslot_boxplot(imbalance_to_regulation, tarifftype, imbalance, path, game, brokers):
 
-    
     current_palette = highlight_palette
     sns.set(rc={"axes.facecolor": axes_facecolor, "figure.facecolor": figure_facecolor})
     
@@ -29,7 +25,7 @@ def kpi1_plotter(kpi1_perc, tarifftype, imbalance, path, game, brokers):
     mid = (f.subplotpars.right + f.subplotpars.left)/2 # centered title
     
     try:
-        box_plot = sns.boxplot(x='hour', y='perc', data=kpi1_perc, palette=current_palette)
+        box_plot = sns.boxplot(x='hour', y='perc', data=imbalance_to_regulation, palette=current_palette)
 
         plt.suptitle('Imbalance reduced in % (Game: {0})'.format(game)
                        , y = 0.95
