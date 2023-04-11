@@ -1,0 +1,17 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+/.idea
+/analysis/output_all/*
+/analysis.ipynb_checkpoints
+/analysis/exploratory_tariff_type.ipynb
+/analysis/visualization_kpi_explore.ipynb
+/analysis/notebooks/analysis_tools/__pychache__
+/analysis/notebooks/analysis_tools
+**/__pycache__
