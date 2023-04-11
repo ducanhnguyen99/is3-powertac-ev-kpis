@@ -5,19 +5,18 @@ import pandas as pd
     show for each broker the up/down-regulated energy and profit.
 '''
 
-def calculate_energy_and_profit(transactions):
-    transactions = transactions[['broker', 'regUsed', 'p2', 'transaction-charge']]
-    transactions = transactions.groupby(by = ['broker'], as_index = False).sum()
+def calculate_energy_and_profit_per_broker(transactions):
+    transactions_per_broker = transactions[['broker', 'regUsed', 'p2', 'transaction-charge']].groupby(by = ['broker'], as_index = False).sum()
 
-    transactions['regUsed'] = transactions['regUsed'].apply(lambda x: round(x, 2))
-    transactions['p2'] = transactions['p2'].apply(lambda x: round(x, 2)) # payment from broker to broker
-    transactions['transaction-charge'] = transactions['transaction-charge'].apply(lambda x: round(x, 2)) # payment from or to customer
-    transactions['profit'] = transactions['p2'] + transactions['transaction-charge'] # payment of both customer and other broker
+    transactions_per_broker['regUsed'] = transactions_per_broker['regUsed'].apply(lambda x: round(x, 2))
+    transactions_per_broker['p2'] = transactions_per_broker['p2'].apply(lambda x: round(x, 2)) # payment from broker to broker
+    transactions_per_broker['transaction-charge'] = transactions_per_broker['transaction-charge'].apply(lambda x: round(x, 2)) # payment from or to customer
+    transactions_per_broker['profit'] = transactions_per_broker['p2'] + transactions_per_broker['transaction-charge'] # payment of both customer and other broker
 
-    return transactions
+    return transactions_per_broker
 
 
-def total_energy_profit_per_broker(matched_transactions, tarifftype, tariff_transactions):
+def total_energy_profit_per_broker(matched_transactions, tarifftype, transactions):
     
     # map the command line argument
     
@@ -25,7 +24,7 @@ def total_energy_profit_per_broker(matched_transactions, tarifftype, tariff_tran
 
     # get list of all brokers to show at the end
     
-    broker_list = tariff_transactions['broker-name'].unique().tolist()
+    broker_list = transactions['broker-name'].unique().tolist()
     final_broker_list = [x for x in broker_list if x != 'default broker'] # exclude default broker
     broker_df = pd.DataFrame(final_broker_list, columns = ['broker'])
     
@@ -38,17 +37,17 @@ def total_energy_profit_per_broker(matched_transactions, tarifftype, tariff_tran
                                                                                   , 'regUsed', 'p2', 'transaction-charge', 'tariff-type']].copy()
     # get KPIs by grouping and manipulating data
 
-    energy_and_profit_up = calculate_energy_and_profit(transactions_up)
-    energy_and_profit_down = calculate_energy_and_profit(transactions_down)
+    energy_and_profit_up = calculate_energy_and_profit_per_broker(transactions_up)
+    energy_and_profit_down = calculate_energy_and_profit_per_broker(transactions_down)
 
     energy_and_profit_up.columns = ['broker', 'upReg', 'pUp_fromBroker', 'pUp_toCustomer', 'profit']
     energy_and_profit_down.columns = ['broker', 'downReg', 'pDown_toBroker', 'pDown_fromCustomer', 'profit']
 
-    df_merge = broker_df.merge(energy_and_profit_up, on = ['broker'], how = 'left')
-    df_merge = df_merge.merge(energy_and_profit_down, on = ['broker'], how = 'left')
+    energy_and_profit_up_and_down = broker_df.merge(energy_and_profit_up, on = ['broker'], how = 'left')
+    energy_and_profit_up_and_down = energy_and_profit_up_and_down.merge(energy_and_profit_down, on = ['broker'], how = 'left')
 
     # use melt to reshape the dataframe
-    df_melt_energy = pd.melt(df_merge, id_vars=['broker'], value_vars=['upReg', 'downReg'])
-    df_melt_profit = pd.melt(df_merge, id_vars=['broker'], value_vars=['pUp_fromBroker', 'profit_x', 'pDown_toBroker', 'profit_y'])
+    melt_energy_up_and_down_per_broker = pd.melt(energy_and_profit_up_and_down, id_vars=['broker'], value_vars=['upReg', 'downReg'])
+    melt_profit_up_and_down_per_broker = pd.melt(energy_and_profit_up_and_down, id_vars=['broker'], value_vars=['pUp_fromBroker', 'profit_x', 'pDown_toBroker', 'profit_y'])
     
-    return [df_melt_energy, df_melt_profit]
+    return [melt_energy_up_and_down_per_broker, melt_profit_up_and_down_per_broker]

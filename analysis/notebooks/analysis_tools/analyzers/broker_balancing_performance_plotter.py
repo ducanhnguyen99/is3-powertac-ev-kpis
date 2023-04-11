@@ -7,7 +7,7 @@ from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_fa
     Boxplotter for KPI2 broker balancing performance with command line arguments.
 '''
 
-def broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifftype, path, game):
+def broker_balancing_performance_boxplot(melt_energy_up_and_down_per_broker, melt_profit_up_and_down_per_broker, tarifftype, path, game):
     try:
         
         current_palette = highlight_palette
@@ -17,8 +17,8 @@ def broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifft
         
         f, axes = plt.subplots(2,1, figsize = (20,16))
 
-        a = sns.boxplot(x='broker', y='value', hue='variable', data=df_melt_energy, ax=axes[0], showfliers = False, palette = current_palette)
-        b = sns.boxplot(x='broker', y='value', hue='variable', data=df_melt_profit, ax=axes[1], showfliers = False, palette = current_palette)
+        a = sns.boxplot(x='broker', y='value', hue='variable', data=melt_energy_up_and_down_per_broker, ax=axes[0], showfliers = False, palette = current_palette)
+        b = sns.boxplot(x='broker', y='value', hue='variable', data=melt_profit_up_and_down_per_broker, ax=axes[1], showfliers = False, palette = current_palette)
    
     except Exception:
         print('Game {} could not be analyzed due to empty csv file possibly since there are no balancing actions'.format(game))
@@ -33,7 +33,6 @@ def broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifft
     h, l = b.get_legend_handles_labels()
     b.legend(h, new_labels, loc = "upper right")
 
-    
     try:
         add_median_labels(a)
         add_median_labels(b)
@@ -42,18 +41,10 @@ def broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifft
 
     axes[0].set(ylabel="Energy")
     axes[1].set(ylabel="Money")
-    
-    mid = (f.subplotpars.right + f.subplotpars.left)/2
-
     axes[0].set_title("Energy up-/down-regulated per broker")
     axes[1].set_title("Payment on Balancing Market and Profits per broker")
-    
-    # dictionary for the title
-    
-    tarifftype_dict = {'BATTERY_STORAGE': 'Battery Storage', 'PRODUCTION': 'Production', 'STORAGE': 'Storage'
-                      , 'CONSUMPTION': 'Consumption', 'THERMAL_STORAGE_CONSUMPTION' : 'Thermal Storage Consumption'
-                      , 'SOLAR_PRODUCTION' : 'Solar Production', 'WIND_PRODUCTION': 'Wind Production', 'all':'all'}
-    
-    f.suptitle('Broker Balancing Performance (Game: {1}, Tariff-Type: {0})'.format(tarifftype_dict[tarifftype], game), y = 0.92, fontsize = 16, x = mid)
+
+    mid = (f.subplotpars.right + f.subplotpars.left)/2
+    f.suptitle('Broker Balancing Performance (Game: {1}, Tariff-Type: {0})'.format(tarifftype, game), y = 0.92, fontsize = 16, x = mid)
     
     f.savefig(path, bbox_inches='tight')

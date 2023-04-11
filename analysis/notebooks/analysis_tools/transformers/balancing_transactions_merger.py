@@ -5,9 +5,9 @@ import pandas as pd
     customer.
 '''
 
-def regulation_transactions(tariff_transactions):
+def regulation_transactions(transactions):
     # aggregate tariff transactions corresponding to regulation
-    transactions_for_regulation = tariff_transactions[tariff_transactions['transaction-regulation'] == 1].copy()
+    transactions_for_regulation = transactions[transactions['transaction-regulation'] == 1].copy()
 
     transactions_for_regulation = transactions_for_regulation[['timeslot'
         , 'broker-name'
@@ -38,9 +38,9 @@ def pivot_balancing_actions(balancing_actions):
 
     pivoted_balancing_actions = pivoted_balancing_actions[pivoted_balancing_actions["regUsed"] != 0 ]
     return pivoted_balancing_actions
-def matched_balancing_transactions(tariff_transactions, balancing_actions):
+def matched_balancing_transactions(transactions, balancing_actions):
     pivoted_balancing_actions = pivot_balancing_actions(balancing_actions)
-    regulation_transactions_agg = regulation_transactions(tariff_transactions)
+    regulation_transactions_agg = regulation_transactions(transactions)
     
     # merge datasets
     matched_transactions = pivoted_balancing_actions.merge(regulation_transactions_agg, left_on=['ts', 'broker'], right_on=['timeslot', 'broker-name'])

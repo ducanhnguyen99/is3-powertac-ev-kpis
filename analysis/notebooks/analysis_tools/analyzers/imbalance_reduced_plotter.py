@@ -12,12 +12,6 @@ def imbalance_reduced_per_timeslot_boxplot(imbalance_to_regulation, tarifftype, 
     current_palette = highlight_palette
     sns.set(rc={"axes.facecolor": axes_facecolor, "figure.facecolor": figure_facecolor})
     
-    
-    # dictionary for the legend
-    tarifftype_dict = {'BATTERY_STORAGE': 'Battery Storage', 'PRODUCTION': 'Production', 'STORAGE': 'Storage'
-                      , 'CONSUMPTION': 'Consumption', 'THERMAL_STORAGE_CONSUMPTION' : 'Thermal Storage Consumption'
-                      , 'SOLAR_PRODUCTION' : 'Solar Production', 'WIND_PRODUCTION': 'Wind Production', 'all':'all'}    
-    
     # plot
     
     f = plt.figure(figsize=(16,4))
@@ -32,7 +26,7 @@ def imbalance_reduced_per_timeslot_boxplot(imbalance_to_regulation, tarifftype, 
                        , x = mid
                        , fontsize = 14,
                         fontweight = 'bold')
-        plt.title('Tariff-type: {0}, Up/Down-reg: {1}, Brokers: {2}'.format(tarifftype_dict[tarifftype], imbalance, brokers), y = 1.1)
+        plt.title('Tariff-type: {0}, Up/Down-reg: {1}, Brokers: {2}'.format(tarifftype, imbalance, brokers), y = 1.1)
         plt.ylabel('% of imbalance reduced', fontsize=12, labelpad=10)
         plt.xlabel('hour', fontsize=12, labelpad=10)
 

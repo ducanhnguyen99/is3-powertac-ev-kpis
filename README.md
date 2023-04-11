@@ -77,7 +77,7 @@
 Exemplary command-line execution (inside the folder of the .py file)
 
    ```sh
-   python3 kpi3_tariff_type_group.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22
+   python3 tariff_type_overview_main.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22
    ```
 
 ### KPI1 - Reduced imbalance through balancing
@@ -124,7 +124,7 @@ The title indicates the game finals_2022 and all tariff types considered, for th
 These boxplots are split up on a facet grid depending on the tariff type we look at to enable better comparison of the aforementioned KPIs. We compare among the brokers the number of tarifftypes published, the number of customer subscribed days, the amount of energy traded and the average price per kWh. Additionally one can isolate the analysis to certain customer groups e.g. residential_ev.
 
 ```sh
-python3 kpi3_tariff_type_group.py game-name broker-names customer-names
+python3 tariff_type_overview_main.py game-name broker-names customer-names
 ```
 Input values:  <br>
 game-name: finals_2022  <br>
@@ -164,7 +164,7 @@ As only two brokers utilize the balancing capacities, the comparison of the redu
 <img src="analysis/output_all/finals_2022_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_residential_ev_tariff_subs.png"> 
 
 ```sh
-python3 kpi3_tariff_type_group.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22 residential_ev
+python3 tariff_type_overview_main.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22 residential_ev
 ```
 
 Comparing the prices Mertacor22, TUC_TAC22 and VidyutVanika offer the lowest prices for the electric vehicles. This is also reflected in the number of subscriber days, averaging the highest for these three brokers.
@@ -173,7 +173,7 @@ Comparing the prices Mertacor22, TUC_TAC22 and VidyutVanika offer the lowest pri
 <img src="images/exemplary_insights/finals_2022_VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22_any_tariff_prices.png"> 
 
 ```sh
-python3 kpi3_tariff_type_group.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22 any
+python3 tariff_type_overview_main.py finals_2022 VidyutVanika,IS3,COLDPOWER22,TUC_TAC22,Mertacor22 any
 ```
 
 The plot shows that customers subscribing to the tariff BATTERY-STORAGE even receive money for charging. This is likely due to the compensation of curtailment. The brokers still make profit as they receive payments from the other brokers that contribute to the imbalances.

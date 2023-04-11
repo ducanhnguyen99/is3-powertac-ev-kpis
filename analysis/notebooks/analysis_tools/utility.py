@@ -61,35 +61,5 @@ def add_median_labels(ax, fmt='.2f'):
             path_effects.Normal(),
         ])
         
-def kpi3_catplot(x, y, current_palette, tf_type_df, ylabel, suptitle, destination, ylim):
-    a = sns.catplot(
-        data=tf_type_df,
-        x=x,
-        y=y,
-        col="tariff-type", # creates facet grid
-        kind="box",
-        hue="broker",
-        col_wrap=2, # number of columns in grid
-        legend_out=True, # legend outside of plot
-        palette=current_palette,
-        dodge=False, # resizing
-        sharey=False, # rescaling y axis
-        showfliers=False, # remove outliers
-        height=5, # figure size
-        aspect=2,
-    )
-        
-    for ax in a.axes:
-        ax.set_xticklabels(tf_type_df["broker"].unique()) # correct the x ticks
-        ax.tick_params(labelbottom=True) 
-        add_median_labels(ax) # annotate median value
-    
-    if (ylim == 1):
-        a.set(ylim=(0, None))
-    
-    a.set_ylabels(ylabel)
-    a.add_legend()
-    a.fig.suptitle(suptitle, y=1.02, fontsize=16)
 
-    a.savefig(destination, bbox_inches="tight")
 

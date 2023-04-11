@@ -29,20 +29,20 @@ games_csv = "Power-TAC-finals-2022-csv-file.csv"
 
 list_games = filter_games(cwd, games_csv, brokers)
 
-final_df = pd.DataFrame() #initialize 
+matched_transactions = pd.DataFrame() #initialize
 
 # aggregate data of every game into one data frame and merge tariff transactions and balancing actions
 
 for game in list_games:
     try:
-        tariff_transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
+        transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
         balancing_actions = pd.read_csv(cwd/"{0}/analysis/{1}.broker-balancing-actions.csv".format(game, game), skipinitialspace=True, delimiter=";", decimal = ".")
 
-        final_df = pd.concat([final_df, matched_balancing_transactions(tariff_transactions, balancing_actions)]) # apprehend and transform each game's data
+        matched_transactions = pd.concat([matched_transactions, matched_balancing_transactions(transactions, balancing_actions)]) # apprehend and transform each game's data
     except Exception:
         print('Game {} could not be processed due to missing csv files'.format(game))
         continue
 
 # transform and plot the kpi
-imbalance_to_regulation = imbalance_to_regulation_amount_per_timeslot(final_df, tarifftype, imbalance)
+imbalance_to_regulation = imbalance_to_regulation_amount_per_timeslot(matched_transactions, tarifftype, imbalance)
 imbalance_reduced_per_timeslot_boxplot(imbalance_to_regulation, tarifftype,imbalance, destination/"{0}_{1}_{2}_{3}_imbalance_reduced.png".format(group, tarifftype, imbalance, brokers), group, brokers)

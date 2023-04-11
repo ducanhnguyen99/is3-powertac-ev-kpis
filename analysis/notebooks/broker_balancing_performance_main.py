@@ -30,31 +30,31 @@ list_games = filter_games(cwd, games_csv, brokers)
 
 # initialize our dataframes aggregating the games' data
 
-df_melt_energy = pd.DataFrame()
-df_melt_profit = pd.DataFrame()
+melt_energy_up_and_down_per_broker = pd.DataFrame()
+melt_profit_up_and_down_per_broker = pd.DataFrame()
 
 # aggregate data of every game into one data frame and transform
 
 for game in list_games:
     try:
         
-        tariff_transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
+        transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
         balancing_actions = pd.read_csv(cwd/"{0}/analysis/{1}.broker-balancing-actions.csv".format(game, game), skipinitialspace=True, delimiter=";", decimal = ".")
         
         # transform the game's data
     
-        final_df = matched_balancing_transactions(tariff_transactions, balancing_actions)
-        list_df_melt = total_energy_profit_per_broker(final_df, tarifftype, tariff_transactions)
+        final_df = matched_balancing_transactions(transactions, balancing_actions)
+        list_df_melt = total_energy_profit_per_broker(final_df, tarifftype, transactions)
         
          # apprehend the game's data
-        
-        df_melt_energy = pd.concat([df_melt_energy, list_df_melt[0]])
-        df_melt_profit = pd.concat([df_melt_profit, list_df_melt[1]])
+
+        melt_energy_up_and_down_per_broker = pd.concat([melt_energy_up_and_down_per_broker, list_df_melt[0]])
+        melt_profit_up_and_down_per_broker = pd.concat([melt_profit_up_and_down_per_broker, list_df_melt[1]])
     except Exception:
         print('Game {} could not be processed due to missing csv files'.format(game))
         continue
         
 # plot the kpi
         
-broker_balancing_performance_boxplot(df_melt_energy, df_melt_profit, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
+broker_balancing_performance_boxplot(melt_energy_up_and_down_per_brokery, melt_profit_up_and_down_per_broker, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
        
