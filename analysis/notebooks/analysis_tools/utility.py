@@ -24,7 +24,7 @@ axes_facecolor = "#e9d8a6"
 figure_facecolor = "#e9d8a6"
 
 
-def filter_games(cwd, games_csv, brokers):
+def filter_games(cwd: Path, games_csv: str, brokers: str) -> list[str]:
     games = pd.read_csv(cwd/games_csv, skipinitialspace=True, delimiter=";")
     games = games.fillna("na") # used for masking
 
@@ -38,7 +38,7 @@ def filter_games(cwd, games_csv, brokers):
         return list_games
     
     
-def add_median_labels(ax, fmt='.2f'):
+def add_median_labels(ax: matplotlib.axes.Axes, fmt='.2f'):
     """Add labels for the median at its location.
 
     Arguments:

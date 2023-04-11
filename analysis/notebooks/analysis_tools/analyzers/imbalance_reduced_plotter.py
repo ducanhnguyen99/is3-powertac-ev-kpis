@@ -2,12 +2,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from analysis_tools.utility import (add_median_labels)
 from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_facecolor)
+from analysis.notebooks.analysis_tools.types import ImbalanceRegulationFrame
+
 
 '''
-    Boxplotter for KPI1 imbalance reduced through balancing actions with command line arguments.
+    Boxplotter for imbalance reduced through balancing actions with command line arguments.
 '''
 
-def imbalance_reduced_per_timeslot_boxplot(imbalance_to_regulation, tarifftype, imbalance, path, game, brokers):
+def imbalance_reduced_per_timeslot_boxplot(imbalance_to_regulation: ImbalanceRegulationFrame, tarifftype: str, imbalance: str, path: Path, game: str, brokers: str):
 
     current_palette = highlight_palette
     sns.set(rc={"axes.facecolor": axes_facecolor, "figure.facecolor": figure_facecolor})

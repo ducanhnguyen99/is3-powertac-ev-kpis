@@ -1,13 +1,15 @@
 import pandas as pd
 import numpy as np
+from analysis.notebooks.analysis_tools.types import TariffTransactionFrame, TariffCountFrame, TariffEnergyFrame, TariffSubscriberFrame, TariffPriceFrame
 
 '''
     Transformer for KPI3 tariff type KPIs with command line arguments. Returns for each tariff type the publish-count, energy-amount, subs-
     number in days and avg_price per kWh.
 '''
 
-def unique_published_tariff_count(transactions):
-    # calculate number of unique tariff ids published, in case of given customer-name shows the actually subscribed number of tariffs for that customer group
+
+def unique_published_tariff_count(transactions: TariffTransactionFrame) -> TariffCountFrame:
+    # in case of given customer-name shows the actually subscribed number of tariffs for that customer group
     counted = pd.DataFrame(
         transactions[["broker-name", "tariff-type", "tariff-id"]]
         .groupby(by=["broker-name", "tariff-type"])["tariff-id"]
@@ -16,8 +18,7 @@ def unique_published_tariff_count(transactions):
     counted.columns = ["broker", "tariff-type", "count"]
     return counted
 
-def traded_energy(transactions):
-    # calculate the energy traded
+def traded_energy(transactions: TariffTransactionFrame) -> TariffEnergyFrame:
     sum_energy = pd.DataFrame(
         transactions[["broker-name", "tariff-type", "transaction-kWh"]]
         .groupby(by=["broker-name", "tariff-type"])
@@ -27,8 +28,7 @@ def traded_energy(transactions):
     sum_energy["energy"] = sum_energy["energy"].apply(lambda x: abs(x))
     return sum_energy
 
-def subscriber_days(transactions):
-    # calculate the number of subscriber days
+def subscriber_days(transactions: TariffTransactionFrame) -> TariffSubscriberFrame:
     subscribers = transactions[
         [
             "timeslot",
@@ -50,8 +50,7 @@ def subscriber_days(transactions):
     subscribers["count"] = subscribers["count"].apply(lambda x: round(x / 24, 2))
     return subscribers
 
-def average_price_per_kwh(transactions):
-    # calculate the average price per kWh
+def average_price_per_kwh(transactions: TariffTransactionFrame) -> TariffPriceFrame:
     price_per_kwh = transactions[transactions["transaction-type"] != "PUBLISH"].copy()
 
     # set energy amount of curtailment transactions to 0, as no energy is bought or sold

@@ -1,14 +1,17 @@
 import seaborn as sns
+import pandas as pd
 from analysis_tools.utility import (add_median_labels, tariff_type_overview_catplot)
 from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_facecolor)
+from analysis.notebooks.analysis_tools.types import TariffCountFrame, TariffEnergyFrame, TariffSubscriberFrame, TariffPriceFrame
 
 '''
     Boxplotter for KPI3 tariff type KPIs with command line arguments.
 '''
 
-def tariff_type_overview_catplot(x, y, current_palette, tf_type_df, ylabel, suptitle, destination, ylim):
+def tariff_type_overview_catplot(x: str, y: str, current_palette: str, kpi: pd.DataFrame, ylabel: str, suptitle: str, destination: str, ylim: int):
+
     a = sns.catplot(
-        data=tf_type_df,
+        data=kpi,
         x=x,
         y=y,
         col="tariff-type", # creates facet grid
@@ -38,7 +41,7 @@ def tariff_type_overview_catplot(x, y, current_palette, tf_type_df, ylabel, supt
 
     a.savefig(destination, bbox_inches="tight")
 
-def tariff_type_overview_boxplots(counted, sum_energy, subscribers, price_per_kwh, destination, customers, brokers, game):
+def tariff_type_overview_boxplots(counted: TariffCountFrame, sum_energy: TariffEnergyFrame, subscribers: TariffSubscriberFrame, price_per_kwh: TariffPriceFrame, destination: str, customers: str, brokers: str, game: str):
 
     sns.set(rc={"axes.facecolor": axes_facecolor, "figure.facecolor": figure_facecolor})
     

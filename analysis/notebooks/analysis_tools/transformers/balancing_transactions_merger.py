@@ -1,11 +1,12 @@
 import pandas as pd
+from analysis.notebooks.analysis_tools.types import TariffTransactionFrame, TariffRegulationTransactionFrame, BalancingActionFrame, PivotBalancingActionFrame, MatchedTransactionFrame
 
 '''
     Transformer to create a merged dataset to identify the tariff/transaction type of the balancing action and the balancing charge for the 
     customer.
 '''
 
-def regulation_transactions(transactions):
+def regulation_transactions(transactions: TariffTransactionFrame) -> TariffRegulationTransactionFrame:
     # aggregate tariff transactions corresponding to regulation
     transactions_for_regulation = transactions[transactions['transaction-regulation'] == 1].copy()
 
@@ -22,7 +23,7 @@ def regulation_transactions(transactions):
     regulation_transactions_agg = regulation_transactions_agg[regulation_transactions_agg['transaction-kWh'] != 0]
     return regulation_transactions_agg
 
-def pivot_balancing_actions(balancing_actions):
+def pivot_balancing_actions(balancing_actions: BalancingActionFrame) -> PivotBalancingActionFrame:
     # pivot balancing actions longer to have one broker column with the respective loads and payments
     iterations = range(int((len(balancing_actions.columns)-6)/7))
 
@@ -38,7 +39,7 @@ def pivot_balancing_actions(balancing_actions):
 
     pivoted_balancing_actions = pivoted_balancing_actions[pivoted_balancing_actions["regUsed"] != 0 ]
     return pivoted_balancing_actions
-def matched_balancing_transactions(transactions, balancing_actions):
+def matched_balancing_transactions(transactions: TariffTransactionFrame, balancing_actions: BalancingActionFrame) -> MatchedTransactionFrame:
     pivoted_balancing_actions = pivot_balancing_actions(balancing_actions)
     regulation_transactions_agg = regulation_transactions(transactions)
     

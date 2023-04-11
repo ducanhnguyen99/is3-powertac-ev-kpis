@@ -2,12 +2,13 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from analysis_tools.utility import (add_median_labels)
 from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_facecolor)
+from analysis.notebooks.analysis_tools.types import EnergyRegulationMeltFrame, ProfitRegulationMeltFrame
 
 '''
     Boxplotter for KPI2 broker balancing performance with command line arguments.
 '''
 
-def broker_balancing_performance_boxplot(melt_energy_up_and_down_per_broker, melt_profit_up_and_down_per_broker, tarifftype, path, game):
+def broker_balancing_performance_boxplot(melt_energy_up_and_down_per_broker: EnergyRegulationMeltFrame, melt_profit_up_and_down_per_broker: ProfitRegulationMeltFrame, tarifftype: str, path: Path, game: str):
     try:
         
         current_palette = highlight_palette
