@@ -1,4 +1,4 @@
-from analysis.notebooks.analysis_tools.types import MatchedTransactionFrame, ImbalanceAmountFrame, RegulationAmountFrame, ImbalanceRegulationFrame
+from ..types import MatchedTransactionFrame, ImbalanceAmountFrame, RegulationAmountFrame, ImbalanceRegulationFrame
 
 '''
     Transformer for KPI1 imbalance reduced through balancing actions with command line arguments. Returns the dataframe showing the % share of 

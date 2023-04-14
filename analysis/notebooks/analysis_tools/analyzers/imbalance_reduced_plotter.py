@@ -2,7 +2,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from analysis_tools.utility import (add_median_labels)
 from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_facecolor)
-from analysis.notebooks.analysis_tools.types import ImbalanceRegulationFrame
+from ..types import ImbalanceRegulationFrame
+from pathlib import Path
 
 
 '''

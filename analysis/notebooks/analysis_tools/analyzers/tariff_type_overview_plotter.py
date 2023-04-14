@@ -1,8 +1,8 @@
 import seaborn as sns
 import pandas as pd
-from analysis_tools.utility import (add_median_labels, tariff_type_overview_catplot)
+from analysis_tools.utility import (add_median_labels)
 from analysis_tools.utility import (highlight_palette, axes_facecolor, figure_facecolor)
-from analysis.notebooks.analysis_tools.types import TariffCountFrame, TariffEnergyFrame, TariffSubscriberFrame, TariffPriceFrame
+from ..types import TariffCountFrame, TariffEnergyFrame, TariffSubscriberFrame, TariffPriceFrame
 
 '''
     Boxplotter for KPI3 tariff type KPIs with command line arguments.
@@ -28,7 +28,7 @@ def tariff_type_overview_catplot(x: str, y: str, current_palette: str, kpi: pd.D
     )
 
     for ax in a.axes:
-        ax.set_xticklabels(tf_type_df["broker"].unique()) # correct the x ticks
+        ax.set_xticklabels(kpi["broker"].unique()) # correct the x ticks
         ax.tick_params(labelbottom=True)
         add_median_labels(ax) # annotate median value
 

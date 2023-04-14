@@ -147,8 +147,6 @@ EnergyProfitFrame = NewType('EnergyProfitFrame', DataFrame)
         profit: long
 """
 
-melt_energy_up_and_down_per_broker = pd.melt(energy_and_profit_up_and_down, id_vars=['broker'], value_vars=['upReg', 'downReg'])
-melt_profit_up_and_down_per_broker = pd.melt(energy_and_profit_up_and_down, id_vars=['broker'], value_vars=['pUp_fromBroker', 'profit_x', 'pDown_toBroker', 'profit_y'])
 
 EnergyRegulationMeltFrame = NewType('EnergyRegulationMeltFrame', DataFrame)
 """ Energy per broker from both up- and down-regulation

@@ -1,5 +1,5 @@
 import pandas as pd
-from analysis.notebooks.analysis_tools.types import TariffTransactionFrame, TariffRegulationTransactionFrame, BalancingActionFrame, PivotBalancingActionFrame, MatchedTransactionFrame
+from ..types import TariffTransactionFrame, TariffRegulationTransactionFrame, BalancingActionFrame, PivotBalancingActionFrame, MatchedTransactionFrame
 
 '''
     Transformer to create a merged dataset to identify the tariff/transaction type of the balancing action and the balancing charge for the 

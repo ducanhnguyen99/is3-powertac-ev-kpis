@@ -56,5 +56,5 @@ for game in list_games:
         
 # plot the kpi
         
-broker_balancing_performance_boxplot(melt_energy_up_and_down_per_brokery, melt_profit_up_and_down_per_broker, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
+broker_balancing_performance_boxplot(melt_energy_up_and_down_per_broker, melt_profit_up_and_down_per_broker, tarifftype, destination/"{0}_{1}_{2}_broker_performance.png".format(group, tarifftype, brokers), group)
        

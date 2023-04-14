@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from analysis.notebooks.analysis_tools.types import TariffTransactionFrame, TariffCountFrame, TariffEnergyFrame, TariffSubscriberFrame, TariffPriceFrame
+from ..types import TariffTransactionFrame, TariffCountFrame, TariffEnergyFrame, TariffSubscriberFrame, TariffPriceFrame
 
 '''
     Transformer for KPI3 tariff type KPIs with command line arguments. Returns for each tariff type the publish-count, energy-amount, subs-

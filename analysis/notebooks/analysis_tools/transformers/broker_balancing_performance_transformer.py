@@ -1,5 +1,6 @@
 import pandas as pd
-from analysis.notebooks.analysis_tools.types import TariffTransactionFrame, EnergyProfitFrame, MatchedTransactionFrame, EnergyRegulationMeltFrame, ProfitRegulationMeltFrame
+from ..types import TariffTransactionFrame, EnergyProfitFrame, MatchedTransactionFrame, EnergyRegulationMeltFrame, ProfitRegulationMeltFrame
+from typing import List, Union
 
 '''
     Transformer for broker balancing performance with command line arguments. Returns the melted dataframes of energy and profit to 
@@ -17,7 +18,7 @@ def calculate_energy_and_profit_per_broker(transactions: TariffTransactionFrame)
     return transactions_per_broker
 
 
-def total_energy_profit_per_broker(matched_transactions: MatchedTransactionFrame, tarifftype: str, transactions: TariffTransactionFrame) -> list[EnergyRegulationMeltFrame, ProfitRegulationMeltFrame]:
+def total_energy_profit_per_broker(matched_transactions: MatchedTransactionFrame, tarifftype: str, transactions: TariffTransactionFrame) -> List[Union[EnergyRegulationMeltFrame, ProfitRegulationMeltFrame]]:
     
     # map the command line argument
     

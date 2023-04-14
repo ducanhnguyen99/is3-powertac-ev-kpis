@@ -1,6 +1,9 @@
 import pandas as pd
 import seaborn as sns
 import matplotlib.patheffects as path_effects
+from pathlib import Path
+from typing import List
+import matplotlib
 
 '''
     Utility file containing color specifications and other supporting functions.
@@ -24,7 +27,7 @@ axes_facecolor = "#e9d8a6"
 figure_facecolor = "#e9d8a6"
 
 
-def filter_games(cwd: Path, games_csv: str, brokers: str) -> list[str]:
+def filter_games(cwd: Path, games_csv: str, brokers: str) -> List[str]:
     games = pd.read_csv(cwd/games_csv, skipinitialspace=True, delimiter=";")
     games = games.fillna("na") # used for masking
 
