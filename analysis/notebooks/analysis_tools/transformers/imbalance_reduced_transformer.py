@@ -1,4 +1,9 @@
 from ..types import MatchedTransactionFrame, ImbalanceAmountFrame, RegulationAmountFrame, ImbalanceRegulationFrame
+from typing import List
+import os
+import typing
+import pandas as pd
+from analysis_tools.transformers.balancing_transactions_merger import (matched_balancing_transactions)
 
 '''
     Transformer for KPI1 imbalance reduced through balancing actions with command line arguments. Returns the dataframe showing the % share of 
@@ -35,3 +40,16 @@ def imbalance_to_regulation_amount_per_timeslot(matched_transactions: MatchedTra
     imbalance_to_regulation['perc'] = imbalance_to_regulation['regUsed'] / imbalance_to_regulation['totalImbalance']
     
     return imbalance_to_regulation
+
+
+# aggregate data of every game into one data frame and merge tariff transactions and balancing actions
+def match_all_games_transactions(list_games: List[str], matched_transactions: MatchedTransactionFrame, cwd: typing.Union[str, os.PathLike]) -> MatchedTransactionFrame:
+    for game in list_games:
+        try:
+            transactions = pd.read_csv(cwd/"{0}/analysis/{1}.tariff-transactions.csv".format(game, game), skipinitialspace=True, delimiter=";")
+            balancing_actions = pd.read_csv(cwd/"{0}/analysis/{1}.broker-balancing-actions.csv".format(game, game), skipinitialspace=True, delimiter=";", decimal = ".")
+            matched_transactions = pd.concat([matched_transactions, matched_balancing_transactions(transactions, balancing_actions)]) # apprehend and transform each game's data
+        except Exception:
+            print('Game {} could not be processed due to missing csv files'.format(game))
+            continue
+    return matched_transactions
